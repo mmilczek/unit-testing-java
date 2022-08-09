@@ -2,6 +2,7 @@ package pl.devfoundry.testing;
 
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MealTest {
@@ -17,28 +18,31 @@ class MealTest {
 
         //then
         assertEquals(28, discountedPrice);
+        assertThat(discountedPrice).isEqualTo(28);
     }
 
     @Test
     void referencesToTheSameObjectShouldBeEqual() {
 
         //given
-        Meal meal = new Meal(10);
-        Meal meal1 = meal;
+        Meal meal1 = new Meal(10);
+        Meal meal2 = meal1;
 
         //then
-        assertSame(meal, meal1);
+        assertSame(meal1, meal2);
+        assertThat(meal1).isSameAs(meal2);
     }
 
     @Test
     void referencesToTheDifferentObjectsShouldNotBeEqual() {
 
         //given
-        Meal meal = new Meal(10);
-        Meal meal1 = new Meal(20);
+        Meal meal1 = new Meal(10);
+        Meal meal2 = new Meal(20);
 
         //then
-        assertNotSame(meal, meal1);
+        assertNotSame(meal1, meal2);
+        assertThat(meal1).isNotSameAs(meal2);
     }
 
     @Test
@@ -46,10 +50,11 @@ class MealTest {
 
         //given
         Meal meal1 = new Meal(10, "Pizza");
-        Meal meal2 = new Meal(20, "Pizza");
+        Meal meal2 = new Meal(10, "Pizza");
 
         //then
         assertEquals(meal1, meal2, "Checking if two meals are equal");
+        assertThat(meal1).isEqualTo(meal2);
     }
 
 }
