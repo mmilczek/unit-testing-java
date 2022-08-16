@@ -1,15 +1,22 @@
-package pl.devfoundry.testing;
+package pl.devfoundry.testing.order;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import pl.devfoundry.testing.Meal;
+import pl.devfoundry.testing.extensions.BeforeAfterExtension;
+import pl.devfoundry.testing.order.Order;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 @ExtendWith(BeforeAfterExtension.class)
 class OrderTest {
@@ -37,7 +44,6 @@ class OrderTest {
 
         //then
          assertArrayEquals(ints1, ints2);
-
     }
 
     @Test
@@ -110,5 +116,48 @@ class OrderTest {
         //then
         assertThat(meals1).isEqualTo(meals2);
     }
+
+    @Test
+    void orderTotalPriceShouldNotExceedsMaxIntWalue() {
+
+        //given
+        Meal meal1 = new Meal(Integer.MAX_VALUE, "Burger");
+        Meal meal2 = new Meal(Integer.MAX_VALUE, "Sandwich");
+
+        //when
+        order.addMealToOrder(meal1);
+        order.addMealToOrder(meal2);
+
+        //then
+        assertThrows(IllegalStateException.class, () -> order.totalPrice());
+    }
+
+    @Test
+    void emptyOrderTotalPriceShouldEqualZero() {
+
+        //given
+        //Ordere is created in BeforeEach
+
+        //then
+        assertThat(order.totalPrice()).isEqualTo(0);
+    }
+
+    @Test
+    void cancelingOrderShouldRemoveAllItemsFromMealsList () {
+
+        //given
+        Meal meal1 = new Meal(Integer.MAX_VALUE, "Burger");
+        Meal meal2 = new Meal(Integer.MAX_VALUE, "Sandwich");
+
+        //when
+        order.addMealToOrder(meal1);
+        order.addMealToOrder(meal2);
+        order.cancel();
+
+        //then
+        assertThat(order.getMeals().size()).isEqualTo(0);
+    }
+
+
 
 }

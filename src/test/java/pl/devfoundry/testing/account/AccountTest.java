@@ -1,12 +1,16 @@
-package pl.devfoundry.testing;
+package pl.devfoundry.testing.account;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import pl.devfoundry.testing.account.Account;
+import pl.devfoundry.testing.account.Address;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @Tag("fries")
 class AccountTest {
@@ -78,4 +82,28 @@ class AccountTest {
         });
     }
 
+    @Test
+    void invalidEmailShouldThrowException() {
+
+        //given
+        Account account = new Account();
+
+        //when
+
+        //then
+        assertThrows(IllegalArgumentException.class, () -> account.setEmail("wrong Email"));
+    }
+
+    @Test
+    void validEmailShouldBeSet() {
+
+        //given
+        Account account = new Account();
+
+        //when
+        account.setEmail("kontakt@devfoundry.pl");
+
+        //then
+        assertThat(account.getEmail(), is("kontakt@devfoundry.pl"));
+    }
 }
