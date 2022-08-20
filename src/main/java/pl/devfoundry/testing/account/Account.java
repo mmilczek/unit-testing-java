@@ -1,6 +1,6 @@
 package pl.devfoundry.testing.account;
 
-public class Account {
+class Account {
 
     private boolean active;
     private Address defaultDeliveryAddress;
