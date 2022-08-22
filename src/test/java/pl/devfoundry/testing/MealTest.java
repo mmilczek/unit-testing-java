@@ -10,6 +10,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import pl.devfoundry.testing.extensions.IAExceptionIgnoreExtension;
 import pl.devfoundry.testing.order.Order;
 
@@ -22,9 +24,14 @@ import java.util.stream.Stream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 class MealTest {
+
+    @Spy
+    private Meal mealSpy;
 
     @Test
     void shouldReturnDiscountedPrice() {
@@ -37,7 +44,7 @@ class MealTest {
 
         //then
         assertEquals(28, discountedPrice);
-        assertThat(discountedPrice).isEqualTo(28);
+        assertThat(discountedPrice, equalTo(28));
     }
 
     @Test
@@ -49,7 +56,7 @@ class MealTest {
 
         //then
         assertSame(meal1, meal2);
-        assertThat(meal1).isSameAs(meal2);
+        assertThat(meal1, equalTo(meal2));
     }
 
     @Test
@@ -61,7 +68,7 @@ class MealTest {
 
         //then
         assertNotSame(meal1, meal2);
-        assertThat(meal1).isNotSameAs(meal2);
+        assertThat(meal1, not(meal2));
     }
 
     @Test
@@ -73,7 +80,7 @@ class MealTest {
 
         //then
         assertEquals(meal1, meal2, "Checking if two meals are equal");
-        assertThat(meal1).isEqualTo(meal2);
+        assertThat(meal1, equalTo(null));
     }
 
     @Test
@@ -155,6 +162,40 @@ class MealTest {
         }
 
         return dynamicTests;
+    }
+
+    @Test
+    void testMealSumPrice() {
+
+        //given
+        Meal meal = mock(Meal.class);
+
+        given(meal.getPrice()).willReturn(15);
+        given(meal.getQuantity()).willReturn(3);
+
+        //when
+        int result = meal.sumPrice();
+
+        //then
+        then(meal).should().getPrice();
+        then(meal).should().getQuantity();
+        assertThat(result, equalTo(45));
+    }
+
+    @Test
+    @ExtendWith(MockitoExtension.class)
+    void testMealSumPriceWithSpy() {
+
+        //given
+
+        given(mealSpy.getPrice()).willReturn(15);
+        given(mealSpy.getQuantity()).willReturn(3);
+
+        //when
+        int result = mealSpy.sumPrice();
+
+        //then
+        assertThat(result, equalTo(45));
     }
 
     private int calculatePrice(int price, int quantity) {

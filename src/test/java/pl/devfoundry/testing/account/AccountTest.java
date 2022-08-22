@@ -3,14 +3,12 @@ package pl.devfoundry.testing.account;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import pl.devfoundry.testing.account.Account;
-import pl.devfoundry.testing.account.Address;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @Tag("fries")
 class AccountTest {
@@ -22,7 +20,7 @@ class AccountTest {
 
         //then
         assertFalse(newAccount.isActive(), "Check if new account is not active");
-        assertThat(newAccount.isActive()).isFalse();
+        assertThat(new Account().isActive(), equalTo(false));
     }
 
     @Test
@@ -35,7 +33,7 @@ class AccountTest {
 
         //then
         assertTrue(newAccount.isActive());
-        assertThat(newAccount.isActive()).isTrue();
+        assertThat(newAccount.isActive(), equalTo(true));
     }
 
     @Test
@@ -49,7 +47,7 @@ class AccountTest {
 
         //then
         assertNull(address);
-        assertThat(address).isNull();
+        assertThat(address, is(null));
     }
 
     @Test
@@ -65,7 +63,7 @@ class AccountTest {
 
         //then
         assertNotNull(defaultAddress);
-        assertThat(address).isNotNull();
+        assertThat(address, equalTo(null));
     }
 
     @RepeatedTest(5)

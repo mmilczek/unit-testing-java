@@ -6,16 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import pl.devfoundry.testing.Meal;
 import pl.devfoundry.testing.extensions.BeforeAfterExtension;
-import pl.devfoundry.testing.order.Order;
 
 import java.util.Arrays;
 import java.util.List;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.assertj.core.api.Assertions.assertThat;
 
 
 @ExtendWith(BeforeAfterExtension.class)
@@ -50,9 +48,9 @@ class OrderTest {
     void mealListShouldBeEmptyAfterCreationOfOrder() {
 
         //then
-        assertThat(order.getMeals()).isEmpty();
-        assertThat(order.getMeals()).size().isEqualTo(0);
-        assertThat(order.getMeals()).hasSize(0);
+        assertThat(order.getMeals(), hasSize(0));
+        assertThat(order.getMeals(), hasSize(1));
+        assertThat(order.getMeals(), hasSize(0));
     }
 
     @Test
@@ -66,11 +64,10 @@ class OrderTest {
         order.addMealToOrder(meal);
 
         //then
-        assertThat(order.getMeals()).hasSize(1);
-        assertThat(order.getMeals()).contains(meal);
+        assertThat(order.getMeals(), hasSize(1));
+        assertThat(order.getMeals(), contains(meal));
 
-        assertThat(order.getMeals().get(0).getPrice()).isEqualTo(15);
-
+        assertThat(order.getMeals().get(0).getPrice(), equalTo(15));
     }
 
     @Test
@@ -84,8 +81,8 @@ class OrderTest {
         order.removeMealFromOrder(meal);
 
         //then
-        assertThat(order.getMeals()).hasSize(0);
-        assertThat(order.getMeals()).doesNotContain(meal);
+        assertThat(order.getMeals(), hasSize(0));
+        assertThat(order.getMeals(), not(contains(meal)));
     }
 
     @Test
@@ -99,7 +96,7 @@ class OrderTest {
         order.addMealToOrder(meal2);
 
         //then
-        assertThat(order.getMeals()).containsAnyOf(meal2, meal1);
+        assertThat(order.getMeals(), containsInAnyOrder(meal1, meal2));
     }
 
     @Test
@@ -114,7 +111,7 @@ class OrderTest {
         List<Meal> meals2 = Arrays.asList(meal1, meal2);
 
         //then
-        assertThat(meals1).isEqualTo(meals2);
+        assertThat(meals1, equalTo(meals2));
     }
 
     @Test
@@ -139,7 +136,7 @@ class OrderTest {
         //Ordere is created in BeforeEach
 
         //then
-        assertThat(order.totalPrice()).isEqualTo(0);
+        assertThat(order.totalPrice(), equalTo(0));
     }
 
     @Test
@@ -155,7 +152,7 @@ class OrderTest {
         order.cancel();
 
         //then
-        assertThat(order.getMeals().size()).isEqualTo(0);
+        assertThat(order.getMeals().size(), equalTo(0));
     }
 
 
